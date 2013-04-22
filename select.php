@@ -49,7 +49,7 @@ echo "The k-th item in the array is: {$kthitem}\n";
 function select(array $A, $i, $j, $k) {
     $n = $j - $i + 1;
     if ($n <= CUTOFF) {
-        $A = insertion_sort($A, $i, $j);
+        insertion_sort($A, $i, $j);
         return $A[$k];
     }
 
@@ -72,10 +72,10 @@ function select(array $A, $i, $j, $k) {
     
 }
 
-function partition(array $A, $i, $j, $pivot) {
+function partition(array &$A, $i, $j, $pivot) {
 }
 
-function insertion_sort(array $A, $i, $j) {
+function insertion_sort(array &$A, $i, $j) {
     for ($x = $i; $x < $j; $x++) {
         $ival = $A[$x];
         $hole = $x;
@@ -87,11 +87,9 @@ function insertion_sort(array $A, $i, $j) {
 
         $A[$hole] = $ival;
     }
-
-    return $A;
 }
 
-function swap(&$A, $x, $y) {
+function swap(array &$A, $x, $y) {
     $tmp   = $A[$x];
     $A[$x] = $A[$y];
     $A[$y] = $tmp;
