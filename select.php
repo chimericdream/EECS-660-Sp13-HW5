@@ -1,6 +1,8 @@
 <?php
 passthru('clear');
 
+error_reporting(0);
+
 echo "################################################################################\n"
    . "## The University of Kansas                                                   ##\n"
    . "## EECS 660, Fundamentals of Algorithms, Spring 2013                          ##\n"
@@ -43,8 +45,15 @@ if (K_VALUE > count($array)) {
 // Use 1-based array indexing to make the algorithm simpler
 array_unshift($array, '-1');
 
-$kthitem = select($array, 1, count($array), K_VALUE);
+echo 'Searching for the k-th smallest item, k = ' . K_VALUE . ', in file ' . INPUT_FILE . ".\n";
+echo 'Using r = ' . GROUP_SIZE . ' and cutoff = ' . CUTOFF . "\n\n";
+
+$kthitem = select($array, 1, count($array) - 1, K_VALUE);
 echo "The k-th item in the array is: {$kthitem}\n";
+
+//var_dump($array);
+//insertion_sort($array, 1, 15);
+//var_dump($array);
 
 function select(array $A, $i, $j, $k) {
     $n = $j - $i + 1;
@@ -55,32 +64,69 @@ function select(array $A, $i, $j, $k) {
 
     $numgroups = floor($n / GROUP_SIZE);
 
+    $start  = $i;
     for ($m = 1; $m <= $numgroups; $m++) {
-        //put the medians of the groups of size r into A[i], A[i+1], ...
+        $finish = $start + GROUP_SIZE - 1;
+
+        insertion_sort($A, $start, $finish);
+
+        $median = floor(($finish - $start) / 2) + $start;
+        swap($A, $i + $m - 1, $median);
+
+        $start = $finish + 1;
     }
 
     $pivot = select($A, $i, $i + $numgroups - 1, floor(1 + ($numgroups / 2)));
-    $p = partition($A, $i, $j, $pivot);
+    $p     = partition($A, $i, $j, $pivot);
 
     if ($k <= $p - $i) {
         return select($A, $i, $p - 1, $k);
     }
 
-//    partition A[p] to A[j] to find keys equal to the pivot
-//    if k is not in the range of keys equal to the pivot
-//        return (select(p,j,k-p+i)) // p is the index of the first key not equal to the pivot
-    
+    $p = partition($A, $p, $j, $pivot, true);
+    if ($k <= $p) {
+        return $p;
+    }
+
+    return select($A, $p, $j, $k - $p + $i);
+
+/*
+    if left = right        // If the list contains only one element
+        return list[left]  // Return that element
+    pivotIndex := ...     // select a pivotIndex between left and right
+    pivotNewIndex := partition(list, left, right, pivotIndex)
+    pivotDist := pivotNewIndex - left + 1
+    // The pivot is in its final sorted position,
+    // so pivotDist reflects its 1-based position if list were sorted
+    if pivotDist = k
+        return list[pivotNewIndex]
+    else if k < pivotDist
+        return select(list, left, pivotNewIndex - 1, k)
+    else
+        return select(list, pivotNewIndex + 1, right, k - pivotDist)
+*/
 }
 
-function partition(array &$A, $i, $j, $pivot) {
+function partition(array &$A, $start, $finish, $pivot, $findequal = false) {
+    $pivotval = $A[$pivot];
+    swap($A, $finish, $pivot);
+    $pivotidx = $start;
+
+    for ($i = $start; $i < $finish; $i++) {
+        if ($A[$i] < $pivotval || ($A[$i] == $pivotval && $findequal)) {
+            swap($A, $i, $pivotidx++);
+        }
+    }
+    swap($A, $pivotidx, $finish);
+    return $pivotidx;
 }
 
-function insertion_sort(array &$A, $i, $j) {
-    for ($x = $i; $x < $j; $x++) {
-        $ival = $A[$x];
-        $hole = $x;
+function insertion_sort(array &$A, $start, $finish) {
+    for ($i = $start; $i <= $finish; $i++) {
+        $ival = $A[$i];
+        $hole = $i;
 
-        while ($hole > $i && $ival < $A[$hole - 1]) {
+        while ($hole > $start && $ival < $A[$hole - 1]) {
             swap($A, $hole, $hole - 1);
             $hole--;
         }
@@ -119,7 +165,7 @@ function parse_arguments($argv) {
                 exit;
                 break;
             case '--c':
-                if (empty($argv[$i + 1]) || !is_numeric($argv[$i + 1])) {
+                if (!isset($argv[$i + 1]) || !is_numeric($argv[$i + 1])) {
                     echo "ERROR: If you use the \"--c\" parameter, you must follow it with an integer to use\nas the cutoff.\n";
                     exit;
                 }
@@ -127,7 +173,7 @@ function parse_arguments($argv) {
                 $i++;
                 break;
             case '--g':
-                if (empty($argv[$i + 1]) || !is_numeric($argv[$i + 1])) {
+                if (!isset($argv[$i + 1]) || !is_numeric($argv[$i + 1])) {
                     echo "ERROR: If you use the \"--g\" parameter, you must follow it with an integer to use\nas the group size.\n";
                     exit;
                 }
@@ -135,7 +181,7 @@ function parse_arguments($argv) {
                 $i++;
                 break;
             case '--f':
-                if (empty($argv[$i + 1]) || !is_string($argv[$i + 1])) {
+                if (!isset($argv[$i + 1]) || !is_string($argv[$i + 1])) {
                     echo "ERROR: If you use the \"--f\" parameter, you must follow it with a string to use\nas the input file name.\n";
                     exit;
                 }
@@ -143,7 +189,7 @@ function parse_arguments($argv) {
                 $i++;
                 break;
             case '--k':
-                if (empty($argv[$i + 1]) || !is_numeric($argv[$i + 1])) {
+                if (!isset($argv[$i + 1]) || !is_numeric($argv[$i + 1])) {
                     echo "ERROR: If you use the \"--k\" parameter, you must follow it with an integer to use\nas the index to retrieve.\n";
                     exit;
                 }
