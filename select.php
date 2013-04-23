@@ -47,67 +47,66 @@ array_unshift($array, '-1');
 
 echo 'Searching for the k-th smallest item, k = ' . K_VALUE . ', in file ' . INPUT_FILE . ".\n";
 echo 'Using r = ' . GROUP_SIZE . ' and cutoff = ' . CUTOFF . "\n\n";
-
 $kthitem = select($array, 1, count($array) - 1, K_VALUE);
-echo "The k-th item in the array is: {$kthitem}\n";
+echo "The k-th item in the array is: {$array[$kthitem]}\n";
 
-//var_dump($array);
-//insertion_sort($array, 1, 15);
-//var_dump($array);
+function select(array &$A, $left, $right, $k) {
+    echo "select(A, {$left}, {$right}, {$k})\n";
 
-function select(array $A, $i, $j, $k) {
-    $n = $j - $i + 1;
-    if ($n <= CUTOFF) {
-        insertion_sort($A, $i, $j);
-        return $A[$k];
+    $n = $right - $left + 1;
+    echo "  n: {$n}\n";
+    if ($n <= CUTOFF || $n < GROUP_SIZE) {
+        insertion_sort($A, $left, $right);
+        printarr($A, '  ');
+        return $k + $left - 1;
     }
 
-    $numgroups = floor($n / GROUP_SIZE);
+    $numgroups = ceil($n / GROUP_SIZE);
+    echo "  numgoups: {$numgroups}\n";
 
-    $start  = $i;
+    $start  = $left;
     for ($m = 1; $m <= $numgroups; $m++) {
         $finish = $start + GROUP_SIZE - 1;
+        if ($finish > $right) {
+            $finish = $right;
+        }
+        echo "  start: {$start}; finish: {$finish}\n";
 
         insertion_sort($A, $start, $finish);
+        printarr($A, '  ');
 
         $median = floor(($finish - $start) / 2) + $start;
-        swap($A, $i + $m - 1, $median);
+        echo "    median: A[{$median}] = {$A[$median]}\n";
+
+        echo "    swapping: A[" . ($left + $m - 1) . "] = " . $A[$left + $m - 1] . " with A[{$median}] = {$A[$median]}\n";
+        swap($A, $left + $m - 1, $median);
+        printarr($A, '    ');
 
         $start = $finish + 1;
     }
 
-    $pivot = select($A, $i, $i + $numgroups - 1, floor(1 + ($numgroups / 2)));
-    $p     = partition($A, $i, $j, $pivot);
+    $pivot = select($A, $left, $left + $numgroups - 1, floor(1 + ($numgroups / 2)));
+    echo "  pivot: A[{$pivot}] = {$A[$pivot]}\n";
+    $p     = partition($A, $left, $right, $pivot);
+    echo "  p1: A[{$p}] = {$A[$p]}\n";
+    printarr($A, '  ');
 
-    if ($k <= $p - $i) {
-        return select($A, $i, $p - 1, $k);
+    if ($k <= $p - $left) {
+        return select($A, $left, $p - 1, $k);
     }
 
-    $p = partition($A, $p, $j, $pivot, true);
-    if ($k <= $p) {
+    $p = partition($A, $p, $right, $p, true);
+    echo "  p2: A[{$p}] = {$A[$p]}\n";
+    printarr($A, '  ');
+    if ($k < $p) {
         return $p;
     }
 
-    return select($A, $p, $j, $k - $p + $i);
-
-/*
-    if left = right        // If the list contains only one element
-        return list[left]  // Return that element
-    pivotIndex := ...     // select a pivotIndex between left and right
-    pivotNewIndex := partition(list, left, right, pivotIndex)
-    pivotDist := pivotNewIndex - left + 1
-    // The pivot is in its final sorted position,
-    // so pivotDist reflects its 1-based position if list were sorted
-    if pivotDist = k
-        return list[pivotNewIndex]
-    else if k < pivotDist
-        return select(list, left, pivotNewIndex - 1, k)
-    else
-        return select(list, pivotNewIndex + 1, right, k - pivotDist)
-*/
+    return select($A, $p, $right, $k - $p + $left);
 }
 
 function partition(array &$A, $start, $finish, $pivot, $findequal = false) {
+    echo 'partition(A, ' . $start . ', ' . $finish . ', ' . $pivot . ', ' . $findequal . ')' . "\n";
     $pivotval = $A[$pivot];
     swap($A, $finish, $pivot);
     $pivotidx = $start;
@@ -216,4 +215,12 @@ function parse_arguments($argv) {
         echo "ERROR: You must specify a k-value with the \"--k\" parameter when executing the script.\n";
         exit;
     }
+}
+
+function printarr(array $a, $prepend = '') {
+    echo $prepend;
+    for ($i = 1; $i < count($a); $i++) {
+        echo $a[$i] . ' ';
+    }
+    echo "\n";
 }
