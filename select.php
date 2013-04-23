@@ -51,62 +51,44 @@ $kthitem = select($array, 1, count($array) - 1, K_VALUE);
 echo "The k-th item in the array is: {$array[$kthitem]}\n";
 
 function select(array &$A, $left, $right, $k) {
-    echo "select(A, {$left}, {$right}, {$k})\n";
-
     $n = $right - $left + 1;
-    echo "  n: {$n}\n";
     if ($n <= CUTOFF || $n < GROUP_SIZE) {
         insertion_sort($A, $left, $right);
-        printarr($A, '  ');
         return $k + $left - 1;
     }
 
     $numgroups = ceil($n / GROUP_SIZE);
-    echo "  numgoups: {$numgroups}\n";
-
     $start  = $left;
     for ($m = 1; $m <= $numgroups; $m++) {
         $finish = $start + GROUP_SIZE - 1;
         if ($finish > $right) {
             $finish = $right;
         }
-        echo "  start: {$start}; finish: {$finish}\n";
 
         insertion_sort($A, $start, $finish);
-        printarr($A, '  ');
 
         $median = floor(($finish - $start) / 2) + $start;
-        echo "    median: A[{$median}] = {$A[$median]}\n";
-
-        echo "    swapping: A[" . ($left + $m - 1) . "] = " . $A[$left + $m - 1] . " with A[{$median}] = {$A[$median]}\n";
         swap($A, $left + $m - 1, $median);
-        printarr($A, '    ');
 
         $start = $finish + 1;
     }
 
     $pivot = select($A, $left, $left + $numgroups - 1, floor(1 + ($numgroups / 2)));
-    echo "  pivot: A[{$pivot}] = {$A[$pivot]}\n";
     $p     = partition($A, $left, $right, $pivot);
-    echo "  p1: A[{$p}] = {$A[$p]}\n";
-    printarr($A, '  ');
 
     if ($k <= $p - $left) {
         return select($A, $left, $p - 1, $k);
     }
 
     $p = partition($A, $p, $right, $p, true);
-    echo "  p2: A[{$p}] = {$A[$p]}\n";
-    printarr($A, '  ');
-    if ($k < $p) {
+    if ($k + $left < $p) {
         return $p;
     }
 
-    return select($A, $p, $right, $k - $p + $left);
+    return select($A, $p + 1, $right, $k - $p + $left - 1);
 }
 
 function partition(array &$A, $start, $finish, $pivot, $findequal = false) {
-    echo 'partition(A, ' . $start . ', ' . $finish . ', ' . $pivot . ', ' . $findequal . ')' . "\n";
     $pivotval = $A[$pivot];
     swap($A, $finish, $pivot);
     $pivotidx = $start;
@@ -217,8 +199,7 @@ function parse_arguments($argv) {
     }
 }
 
-function printarr(array $a, $prepend = '') {
-    echo $prepend;
+function printarr(array $a) {
     for ($i = 1; $i < count($a); $i++) {
         echo $a[$i] . ' ';
     }
