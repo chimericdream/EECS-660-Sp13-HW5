@@ -12,43 +12,14 @@ echo "##########################################################################
 
 parse_arguments($argv);
 
-/*
-
-function select(i, j, k:integer)
-    // returns the kth smallest element in A[i..j]
-    // r is the size of the subgroups
-
-    n <- j - i + 1
-    if n <= CUTOFF, then use insertion sort and return A[i + k - 1]
-    else
-        for m <- 1 to floor(n / r) do
-            put the medians of the groups of size r into A[i], A[i+1], ...
-
-        pivot <- select(i, i + floor(n/r) - 1, floor(1 + floor(n/r) / 2)) // recursive call
-        p <- partition(i, j, pivot)
-        if k <= p - i, then return (select(i, p-1, k))
-        else
-            partition A[p] to A[j] to find keys equal to the pivot
-            if k is not in the range of keys equal to the pivot
-                return (select(p,j,k-p+i)) // p is the index of the first key not equal to the pivot
-
-*/
-
-$numbers = file_get_contents(dirname(__FILE__) . '/' . INPUT_FILE);
-$array   = preg_split("/\s+/", $numbers);
-
-if (K_VALUE > count($array)) {
-    echo "ERROR: The k-value you specify must lie within the bounds of the input array.\n";
-    exit;
+if (VERIFY_ALGORITHM) {
+    verify_algorithm();
+} else {
+    run_tests();
 }
 
-// Use 1-based array indexing to make the algorithm simpler
-array_unshift($array, '-1');
-
-echo 'Searching for the k-th smallest item, k = ' . K_VALUE . ', in file ' . INPUT_FILE . ".\n";
-echo 'Using r = ' . GROUP_SIZE . ' and cutoff = ' . CUTOFF . "\n\n";
-$kthitem = select($array, 1, count($array) - 1, K_VALUE);
-echo "The k-th item in the array is: {$array[$kthitem]}\n";
+function run_tests() {
+}
 
 function select(array &$A, $left, $right, $k) {
     $n = $right - $left + 1;
@@ -177,11 +148,18 @@ function parse_arguments($argv) {
                 define('K_VALUE', $argv[$i + 1]);
                 $i++;
                 break;
+            case '--verify':
+                define('VERIFY_ALGORITHM', true);
+                break;
         }
     }
 
+    if (!defined('VERIFY_ALGORITHM')) {
+        define('VERIFY_ALGORITHM', false);
+        define('K_VALUE', 1);
+    }
     if (!defined('CUTOFF')) {
-        define('CUTOFF',     100);
+        define('CUTOFF', 100);
     }
     if (!defined('GROUP_SIZE')) {
         define('GROUP_SIZE', 7);
@@ -190,13 +168,31 @@ function parse_arguments($argv) {
         define('INPUT_FILE', 'select.txt');
     }
     if (!defined('K_VALUE')) {
-        define('K_VALUE',    0);
+        define('K_VALUE', 0);
     }
 
     if (K_VALUE < 1) {
         echo "ERROR: You must specify a k-value with the \"--k\" parameter when executing the script.\n";
         exit;
     }
+}
+
+function verify_algorithm() {
+    $numbers = file_get_contents(dirname(__FILE__) . '/' . INPUT_FILE);
+    $array   = preg_split("/\s+/", $numbers);
+
+    if (K_VALUE > count($array)) {
+        echo "ERROR: The k-value you specify must lie within the bounds of the input array.\n";
+        exit;
+    }
+
+    // Use 1-based array indexing to make the algorithm simpler
+    array_unshift($array, '-1');
+
+    echo 'Searching for the k-th smallest item, k = ' . K_VALUE . ', in file ' . INPUT_FILE . ".\n";
+    echo 'Using r = ' . GROUP_SIZE . ' and cutoff = ' . CUTOFF . "\n\n";
+    $kthitem = select($array, 1, count($array) - 1, K_VALUE);
+    echo "The k-th item in the array is: {$array[$kthitem]}\n";
 }
 
 function printarr(array $a) {
