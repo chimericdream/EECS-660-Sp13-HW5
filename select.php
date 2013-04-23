@@ -19,6 +19,56 @@ if (VERIFY_ALGORITHM) {
 }
 
 function run_tests() {
+    mt_srand(time());
+
+    $testsizes = array(
+        25000,
+        50000,
+        100000,
+        200000,
+    );
+
+    $kvals = array();
+    $times = array();
+
+    foreach ($testsizes as $datasize => $size) {
+        echo "#### Data Size: {$size}\n";
+
+        for ($i = 1; $i <= 10; $i++) {
+            echo "## Test #{$i}\n";
+
+            $data = generateData($size);
+            $k = getRandomKValue($size);
+            $kvals[$datasize][] = $k;
+
+            // Use 1-based array indexing to make the algorithm simpler
+            array_unshift($data, NULL);
+
+            echo "k = {$k}\n";
+
+            $time_start = gettime();
+
+            $kthitem = select($data, 1, $size, $k);
+
+            $time_end = gettime();
+            $time = $time_end - $time_start;
+
+            $times[$datasize][] = $time;
+
+            echo "The k-th smallest item is: {$kthitem}\n";
+            echo "Finding it took $time seconds.\n\n";
+        }
+    }
+
+    for ($i = 0; $i < count($times); $i++) {
+        $sum = 0;
+        for ($j = 0; $j < 10; $j++) {
+            $sum += $times[$i][$j];
+        }
+        $average = $sum / 10;
+
+        echo "The average time for data sets of size {$testsizes[$i]} was: {$average}\n";
+    }
 }
 
 function select(array &$A, $left, $right, $k) {
@@ -187,12 +237,40 @@ function verify_algorithm() {
     }
 
     // Use 1-based array indexing to make the algorithm simpler
-    array_unshift($array, '-1');
+    array_unshift($array, NULL);
 
     echo 'Searching for the k-th smallest item, k = ' . K_VALUE . ', in file ' . INPUT_FILE . ".\n";
     echo 'Using r = ' . GROUP_SIZE . ' and cutoff = ' . CUTOFF . "\n\n";
     $kthitem = select($array, 1, count($array) - 1, K_VALUE);
     echo "The k-th item in the array is: {$array[$kthitem]}\n";
+}
+
+function gettime() {
+    return microtime(true);
+}
+
+function generateData($size = 0) {
+    if ($size == 0) {
+        echo 'ERROR: This should never happen. It\'s kind of like dividing by zero.' . "\n";
+        exit;
+    }
+
+    $data = array();
+
+    for ($i = 1; $i <= $size; $i++) {
+        $data[] = mt_rand(1, $size);
+    }
+
+    return $data;
+}
+
+function getRandomKValue($size = 0) {
+    if ($size == 0) {
+        echo 'ERROR: This should never happen. It\'s kind of like dividing by zero.' . "\n";
+        exit;
+    }
+
+    return mt_rand(1, $size);
 }
 
 function printarr(array $a) {
