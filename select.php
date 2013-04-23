@@ -1,6 +1,8 @@
 <?php
 passthru('clear');
 
+define('ROUNDING_PRECISION', 4);
+
 error_reporting(0);
 
 echo "################################################################################\n"
@@ -32,7 +34,7 @@ function run_tests() {
     $times = array();
 
     foreach ($testsizes as $datasize => $size) {
-        echo "#### Data Size: {$size}\n";
+        echo "#### n = {$size}\n";
 
         for ($i = 1; $i <= 10; $i++) {
             echo "## Test #{$i}\n";
@@ -55,19 +57,22 @@ function run_tests() {
 
             $times[$datasize][] = $time;
 
-            echo "The k-th smallest item is: {$kthitem}\n";
-            echo "Finding it took $time seconds.\n\n";
+            echo "The k-th smallest item is: {$data[$kthitem]}\n";
+            echo "Finding it took " . round($time, ROUNDING_PRECISION) . " seconds.\n\n";
         }
     }
 
     for ($i = 0; $i < count($times); $i++) {
+        echo "#### n = {$size}\n";
+
         $sum = 0;
         for ($j = 0; $j < 10; $j++) {
             $sum += $times[$i][$j];
+            echo "### Test #" . ($j + 1) . ": " . round($times[$i][$j], ROUNDING_PRECISION) . " seconds.\n";
         }
         $average = $sum / 10;
 
-        echo "The average time for data sets of size {$testsizes[$i]} was: {$average}\n";
+        echo "## The average time for data sets of size {$testsizes[$i]} was: " . round($average, ROUNDING_PRECISION) . "\n\n";
     }
 }
 
