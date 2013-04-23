@@ -1,0 +1,263 @@
+################################################################################
+## The University of Kansas                                                   ##
+## EECS 660, Fundamentals of Algorithms, Spring 2013                          ##
+##                                                                            ##
+## Homework 5 Program (select algorithm) for Bill Parrott                     ##
+################################################################################
+
+#### n = 25000
+## Test #1
+k = 21334
+The k-th smallest item is: 21270
+Finding it took 0.7327 seconds.
+
+## Test #2
+k = 9061
+The k-th smallest item is: 9142
+Finding it took 0.7063 seconds.
+
+## Test #3
+k = 4862
+The k-th smallest item is: 4770
+Finding it took 0.6874 seconds.
+
+## Test #4
+k = 10081
+The k-th smallest item is: 9963
+Finding it took 0.7207 seconds.
+
+## Test #5
+k = 23028
+The k-th smallest item is: 22905
+Finding it took 0.7187 seconds.
+
+## Test #6
+k = 16379
+The k-th smallest item is: 16335
+Finding it took 0.7226 seconds.
+
+## Test #7
+k = 17997
+The k-th smallest item is: 17990
+Finding it took 0.7164 seconds.
+
+## Test #8
+k = 17605
+The k-th smallest item is: 17613
+Finding it took 0.6965 seconds.
+
+## Test #9
+k = 14065
+The k-th smallest item is: 14152
+Finding it took 0.7138 seconds.
+
+## Test #10
+k = 21251
+The k-th smallest item is: 21293
+Finding it took 0.71 seconds.
+
+#### n = 50000
+## Test #1
+k = 9676
+The k-th smallest item is: 9667
+Finding it took 1.3814 seconds.
+
+## Test #2
+k = 6946
+The k-th smallest item is: 6852
+Finding it took 1.4133 seconds.
+
+## Test #3
+k = 36688
+The k-th smallest item is: 36659
+Finding it took 1.4086 seconds.
+
+## Test #4
+k = 15422
+The k-th smallest item is: 15489
+Finding it took 1.4053 seconds.
+
+## Test #5
+k = 32873
+The k-th smallest item is: 32918
+Finding it took 1.4378 seconds.
+
+## Test #6
+k = 40600
+The k-th smallest item is: 40645
+Finding it took 1.3866 seconds.
+
+## Test #7
+k = 47847
+The k-th smallest item is: 47775
+Finding it took 1.387 seconds.
+
+## Test #8
+k = 46612
+The k-th smallest item is: 46638
+Finding it took 1.5448 seconds.
+
+## Test #9
+k = 35481
+The k-th smallest item is: 35330
+Finding it took 1.4445 seconds.
+
+## Test #10
+k = 32444
+The k-th smallest item is: 32308
+Finding it took 1.4388 seconds.
+
+#### n = 100000
+## Test #1
+k = 97441
+The k-th smallest item is: 97444
+Finding it took 2.9193 seconds.
+
+## Test #2
+k = 50865
+The k-th smallest item is: 50905
+Finding it took 3.0814 seconds.
+
+## Test #3
+k = 58257
+The k-th smallest item is: 58513
+Finding it took 2.8386 seconds.
+
+## Test #4
+k = 13903
+The k-th smallest item is: 14086
+Finding it took 2.9013 seconds.
+
+## Test #5
+k = 63023
+The k-th smallest item is: 63006
+Finding it took 3.1338 seconds.
+
+## Test #6
+k = 21590
+The k-th smallest item is: 21567
+Finding it took 2.7621 seconds.
+
+## Test #7
+k = 15323
+The k-th smallest item is: 15545
+Finding it took 2.879 seconds.
+
+## Test #8
+k = 58077
+The k-th smallest item is: 57866
+Finding it took 2.9947 seconds.
+
+## Test #9
+k = 28264
+The k-th smallest item is: 28161
+Finding it took 3.0205 seconds.
+
+## Test #10
+k = 14422
+The k-th smallest item is: 14429
+Finding it took 2.9133 seconds.
+
+#### n = 200000
+## Test #1
+k = 1787
+The k-th smallest item is: 1782
+Finding it took 5.9427 seconds.
+
+## Test #2
+k = 29211
+The k-th smallest item is: 28998
+Finding it took 6.0405 seconds.
+
+## Test #3
+k = 43198
+The k-th smallest item is: 43087
+Finding it took 5.7003 seconds.
+
+## Test #4
+k = 5093
+The k-th smallest item is: 5184
+Finding it took 5.5749 seconds.
+
+## Test #5
+k = 96029
+The k-th smallest item is: 96069
+Finding it took 5.9854 seconds.
+
+## Test #6
+k = 98556
+The k-th smallest item is: 98543
+Finding it took 5.9575 seconds.
+
+## Test #7
+k = 157860
+The k-th smallest item is: 158072
+Finding it took 5.6416 seconds.
+
+## Test #8
+k = 196644
+The k-th smallest item is: 196719
+Finding it took 5.8345 seconds.
+
+## Test #9
+k = 116451
+The k-th smallest item is: 115947
+Finding it took 5.7758 seconds.
+
+## Test #10
+k = 117764
+The k-th smallest item is: 117815
+Finding it took 5.7251 seconds.
+
+#### n = 200000
+### Test #1: 0.7327 seconds.
+### Test #2: 0.7063 seconds.
+### Test #3: 0.6874 seconds.
+### Test #4: 0.7207 seconds.
+### Test #5: 0.7187 seconds.
+### Test #6: 0.7226 seconds.
+### Test #7: 0.7164 seconds.
+### Test #8: 0.6965 seconds.
+### Test #9: 0.7138 seconds.
+### Test #10: 0.71 seconds.
+## The average time for data sets of size 25000 was: 0.7125
+
+#### n = 200000
+### Test #1: 1.3814 seconds.
+### Test #2: 1.4133 seconds.
+### Test #3: 1.4086 seconds.
+### Test #4: 1.4053 seconds.
+### Test #5: 1.4378 seconds.
+### Test #6: 1.3866 seconds.
+### Test #7: 1.387 seconds.
+### Test #8: 1.5448 seconds.
+### Test #9: 1.4445 seconds.
+### Test #10: 1.4388 seconds.
+## The average time for data sets of size 50000 was: 1.4248
+
+#### n = 200000
+### Test #1: 2.9193 seconds.
+### Test #2: 3.0814 seconds.
+### Test #3: 2.8386 seconds.
+### Test #4: 2.9013 seconds.
+### Test #5: 3.1338 seconds.
+### Test #6: 2.7621 seconds.
+### Test #7: 2.879 seconds.
+### Test #8: 2.9947 seconds.
+### Test #9: 3.0205 seconds.
+### Test #10: 2.9133 seconds.
+## The average time for data sets of size 100000 was: 2.9444
+
+#### n = 200000
+### Test #1: 5.9427 seconds.
+### Test #2: 6.0405 seconds.
+### Test #3: 5.7003 seconds.
+### Test #4: 5.5749 seconds.
+### Test #5: 5.9854 seconds.
+### Test #6: 5.9575 seconds.
+### Test #7: 5.6416 seconds.
+### Test #8: 5.8345 seconds.
+### Test #9: 5.7758 seconds.
+### Test #10: 5.7251 seconds.
+## The average time for data sets of size 200000 was: 5.8178
+
