@@ -149,16 +149,20 @@ function swap(array &$A, $x, $y) {
 }
 
 function show_help() {
+    echo "Usage: php select.php <args>\n\n";
+
     echo "To change the default options when running the program, the following\narguments can be passed during execution:\n\n"
-       . "--c <number>                Specify a different number for the cutoff\n"
-       . "                            Default: 100\n\n"
-       . "--f <string>                Specify a different input file name\n"
-       . "                            Default: select.txt\n\n"
-       . "--g <number>                Specify a different number for the group size\n"
-       . "                            Default: 7\n\n"
-       . "--help                      Shows this help screen\n\n"
-       . "--k <number>                Specify a k-value of the index to search for\n"
-       . "                            Default: none\n";
+       . "--c <number>      Specify a different number for the cutoff\n"
+       . "                  Default: 100\n\n"
+       . "--f <string>      Specify a different input file name\n"
+       . "                  Default: select.txt\n\n"
+       . "--g <number>      Specify a different number for the group size\n"
+       . "                  Default: 7\n\n"
+       . "--help            Shows this help screen\n\n"
+       . "--k <number>      Specify a k-value of the index to search for\n"
+       . "                  Default: none\n"
+       . "                  Note: This is only used during verification. The timing tests\n"
+       . "                  generate random k-values.\n";
 }
 
 function parse_arguments($argv) {
